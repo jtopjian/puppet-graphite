@@ -1,6 +1,7 @@
 class graphite (
   $carbon_settings        = {},
   $storage_schemas        = {},
+  $storage_aggregation    = {},
   $aggregation_rules      = {},
   $web_package_name       = $::graphite::params::web_package_name,
   $web_package_ensure     = $::graphite::params::web_package_ensure,
@@ -9,6 +10,7 @@ class graphite (
   $carbon_service_ensure  = $::graphite::params::carbon_service_ensure,
   $whisper_package_name   = $::graphite::params::whisper_package_name,
   $whisper_package_ensure = $::graphite::params::whisper_package_ensure,
+  $whisper_storage_dir    = $::graphite::params::whisper_storage_dir,
   $web_server_name        = $::fqdn,
   $web_server             = 'apache',
   $web_port               = '80',

@@ -60,7 +60,7 @@ GRAPHITE_ROOT = '/usr/share/graphite-web'
 # need to change these three settings. Note that the default settings for each
 # of these is relative to GRAPHITE_ROOT
 CONF_DIR = '/etc/graphite'
-STORAGE_DIR = '/var/lib/graphite/whisper'
+STORAGE_DIR = '<%= scope.lookupvar('graphite::whisper_storage_dir') %>'
 CONTENT_DIR = '/usr/share/graphite-web/static'
 
 # To further or fully customize the paths, modify the following. Note that the
@@ -72,7 +72,7 @@ CONTENT_DIR = '/usr/share/graphite-web/static'
 
 ## Data directories
 # NOTE: If any directory is unreadable in DATA_DIRS it will break metric browsing
-WHISPER_DIR = '/var/lib/graphite/whisper'
+WHISPER_DIR = '<%= scope.lookupvar('graphite::whisper_storage_dir') %>'
 #RRD_DIR = '/opt/graphite/storage/rrd'
 #DATA_DIRS = [WHISPER_DIR, RRD_DIR] # Default: set from the above variables
 LOG_DIR = '/var/log/graphite'

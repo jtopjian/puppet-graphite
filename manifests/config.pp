@@ -33,6 +33,17 @@ class graphite::config {
     }
   }
 
+  file {
+    [$::graphite::params::storage_aggregation_conf,
+     $::graphite::params::storage_schemas_conf,
+     $::graphite::params::aggregation_rules_conf,
+     $::graphite::params::carbon_conf]:
+    ensure => present,
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0644',
+  }
+
   # Iterate over a nested hash of key/value settings for carbon.conf
   $::graphite::carbon_settings.each |$section, $settings| {
     $settings.each |$setting, $value| {
@@ -42,6 +53,21 @@ class graphite::config {
         section => $section,
         setting => upcase($setting),
         value   => $value,
+        require => File[$::graphite::params::carbon_conf],
+      }
+    }
+  }
+
+  # Iterate over a nested hash of key/value settings for storage_aggregation.conf
+  $::graphite::storage_aggregation.each |$section, $settings| {
+    $settings.each |$setting, $value| {
+      ini_setting { "${section}: ${setting} = ${value}":
+        ensure  => present,
+        path    => $::graphite::params::storage_aggregation_conf,
+        section => $section,
+        setting => upcase($setting),
+        value   => $value,
+        require => File[$::graphite::params::storage_aggregation_conf],
       }
     }
   }
@@ -55,6 +81,7 @@ class graphite::config {
         section => $section,
         setting => $setting,
         value   => $value,
+        require => File[$::graphite::params::storage_schemas_conf],
       }
     }
   }
@@ -68,6 +95,7 @@ class graphite::config {
         section => $section,
         setting => $setting,
         value   => $value,
+        require => File[$::graphite::params::aggregation_rules_conf],
       }
     }
   }
@@ -91,7 +119,12 @@ class graphite::config {
           inactivity-timeout => 120,
           user               => $::graphite::params::graphite_user,
           group              => $::graphite::params::graphite_group,
-        }
+        },
+        headers => [
+          'set Access-Control-Allow-Origin "*"',
+          'set Access-Control-Allow-Methods "GET, OPTIONS"',
+          'set Access-Control-Allow-Headers "origin, authorization, accept',
+        ],
       }
     }
   }
