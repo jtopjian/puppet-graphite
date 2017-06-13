@@ -87,16 +87,11 @@ class graphite::config {
   }
 
   # Iterate over a nested hash of key/value settings for aggregation-rules.conf
-  $::graphite::aggregation_rules.each |$section, $settings| {
-    $settings.each |$setting, $value| {
-      ini_setting { "${section}: ${setting} = ${value}":
-        ensure  => present,
-        path    => $::graphite::params::aggregation_rules_conf,
-        section => $section,
-        setting => $setting,
-        value   => $value,
-        require => File[$::graphite::params::aggregation_rules_conf],
-      }
+  $::graphite::aggregation_rules.each |$line| {
+    file_line { "$::graphite::params::aggregation_rules_conf $line":
+      path    => $::graphite::params::aggregation_rules_conf,
+      line    => $line,
+      require => File[$::graphite::params::aggregation_rules_conf],
     }
   }
 

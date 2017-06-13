@@ -24,6 +24,7 @@ class graphite (
   $db_host                = '',
   $db_port                = '',
   $memcache_servers       = [],
+  $default_cache_duration = 60,
   $cluster                = false,
   $cluster_fetch_timeout  = 6,
   $cluster_find_timeout   = '2.5',

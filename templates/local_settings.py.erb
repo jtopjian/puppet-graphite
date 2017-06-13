@@ -46,8 +46,14 @@ DEBUG = <%= scope.lookupvar('graphite::django_debug') %>
 # You should not use the loopback address (127.0.0.1) here if using clustering
 # as every webapp in the cluster should use the exact same values to prevent
 # unneeded cache misses. Set to [] to disable caching of images and fetched data
-MEMCACHE_HOSTS = [<% scope.lookupvar('graphite::memcache_servers').each do |m| %> '<%= m -%>', <% end -%>]
-#DEFAULT_CACHE_DURATION = 60 # Cache images and data for 1 minute
+<%-
+  mc = []
+  scope.lookupvar('graphite::memcache_servers').each do |m|
+    mc << "'#{m}'"
+  end
+-%>
+MEMCACHE_HOSTS = [<%= mc.join(',') %>]
+DEFAULT_CACHE_DURATION = <%= scope.lookupvar('graphite::default_cache_duration') %>
 
 #####################################
 # Filesystem Paths #
